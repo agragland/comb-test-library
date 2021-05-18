@@ -9,12 +9,12 @@ class TupleSet:
         curr_factor = 0
         for fct in self.covering_arr:
             for lvl in fct:
-                for pair_fct in range(curr_factor + 1, len(self.covering_arr)):
-                    for pair_lvl in self.covering_arr[pair_fct]:
-                        self.tuple_set.add((lvl, pair_lvl))
+                for to_pair_fct in range(curr_factor + 1, len(self.covering_arr)):
+                    for to_pair_lvl in self.covering_arr[to_pair_fct]:
+                        self.tuple_set.add((lvl, to_pair_lvl))
             curr_factor += 1
 
-        self.copy_set = self.tuple_set.copy()
+        self.tuple_copy = self.tuple_set.copy()
         self.total_tuples = len(self.tuple_set)
 
     def count_tuples_value(self, val, index):
@@ -49,7 +49,7 @@ class TupleSet:
                     self.covered += 1
 
     def reset_tuples(self):
-        self.tuple_set = self.copy_set.copy()
+        self.tuple_set = self.tuple_copy.copy()
         self.covered = 0
 
     def get_total_tuples(self):

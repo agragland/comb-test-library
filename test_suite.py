@@ -27,35 +27,35 @@ class TestSuite:
                 curr_factor = 0
 
                 # first factor
-                for val in self.covering_arr[self.factor_order[curr_factor]]:
-                    count = self.tuples.count_tuples_value(val, self.factor_order[curr_factor])
-                    if count > best_count:
+                factor_index = self.factor_order[curr_factor]
+
+                for val in self.covering_arr[factor_index]:
+                    if (count := self.tuples.count_tuples_value(val, factor_index)) > best_count:
                         best_count = count
                         potential_lvls.clear()
                         potential_lvls.append(val)
                     elif count == best_count:
                         potential_lvls.append(val)
 
-                curr_candidate[self.factor_order[curr_factor]] = random.choice(potential_lvls)
+                curr_candidate[factor_index] = random.choice(potential_lvls)
                 curr_factor += 1
 
                 # remaining factors
                 while curr_factor < len(self.factor_order):
                     best_count = -1
                     potential_lvls.clear()
+                    factor_index = self.factor_order[curr_factor]
 
-                    for val in self.covering_arr[self.factor_order[curr_factor]]:
-                        curr_candidate[self.factor_order[curr_factor]] = val
-                        count = self.tuples.count_tuples_candidate(curr_candidate,
-                                                                   self.factor_order[curr_factor])
-                        if count > best_count:
+                    for val in self.covering_arr[factor_index]:
+                        curr_candidate[factor_index] = val
+                        if (count := self.tuples.count_tuples_candidate(curr_candidate,factor_index)) > best_count:
                             best_count = count
                             potential_lvls.clear()
                             potential_lvls.append(val)
                         elif count == best_count:
                             potential_lvls.append(val)
 
-                    curr_candidate[self.factor_order[curr_factor]] = random.choice(potential_lvls)
+                    curr_candidate[factor_index] = random.choice(potential_lvls)
                     running_total += best_count
                     curr_factor += 1
 
