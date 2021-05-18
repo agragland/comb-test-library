@@ -1,4 +1,5 @@
-from classes import TestSuite, TupleDict
+from tuple_set import TupleSet
+from test_suite import TestSuite
 
 
 def generate_covering_array(num_levels, num_factors):
@@ -17,17 +18,17 @@ def generate_covering_array(num_levels, num_factors):
 def test_suite_output(suite):
     file_out = open("aetg_output.txt", "w")
 
-    file_out.write(str(len(suite))+"\n\n")
+    file_out.write(str(len(suite)) + "\n\n")
 
     for candidate in suite:
-        file_out.write(str(candidate.ret_tuple())+"\n")
+        file_out.write(str(candidate) + "\n")
 
     file_out.close()
 
 
 def main():
-    new_list = generate_covering_array(3, 4)
-    tuples = TupleDict(new_list)
+    new_list = generate_covering_array(4, 40)
+    tuples = TupleSet(new_list)
 
     # generate 100 test suites
     test_suites = []
@@ -36,6 +37,7 @@ def main():
         print(str(i) + " %")
         test_suites.append(suite.generate_suite())
 
+    # run statistics
     lowest_suite = test_suites[0]
     lowest = len(lowest_suite)
     highest = 0
@@ -51,8 +53,8 @@ def main():
 
     print("Results:\n"
           "Lowest AETG:" + str(lowest) + "\n"
-         "Highest AETG: " + str(highest) + "\n"
-         "Average AETG: " + str(
+                                         "Highest AETG: " + str(highest) + "\n"
+                                                                           "Average AETG: " + str(
         suite_sum / 100) + "\n")
 
     test_suite_output(lowest_suite)
