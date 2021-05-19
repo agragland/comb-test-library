@@ -1,21 +1,25 @@
 class TupleSet:
 
-    def __init__(self, new_list):
+    def __init__(self, new_list, n):
         self.tuple_set = set()
+        self.tuple_copy = set()
         self.covering_arr = new_list
         self.covered = 0
+        self.total_tuples = 0
+        self.strength = n
 
-        # generate pairs
-        curr_factor = 0
-        for fct in self.covering_arr:
-            for lvl in fct:
-                for to_pair_fct in range(curr_factor + 1, len(self.covering_arr)):
-                    for to_pair_lvl in self.covering_arr[to_pair_fct]:
-                        self.tuple_set.add((lvl, to_pair_lvl))
-            curr_factor += 1
+    def n_way_recursion(self, depth, t, f):
+        if depth == self.strength:
+            self.tuple_set.add(t)
+        else:
+            for fct in range(f, len(self.covering_arr)):
+                for lvl in self.covering_arr[fct]:
+                    nest_t = t + (lvl,)
+                    self.n_way_recursion(depth + 1, nest_t, fct+1)
 
-        self.tuple_copy = self.tuple_set.copy()
+    def update_tuples(self):
         self.total_tuples = len(self.tuple_set)
+        self.tuple_copy = self.tuple_set.copy()
 
     def count_tuples_value(self, val, index):
         count = 0

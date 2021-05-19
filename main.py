@@ -38,7 +38,9 @@ def main():
     cover_input = input("Input as follows - \"#Levels^#Factors\" - put a space between each for multi-level covering:")
 
     new_list = generate_covering_array(cover_input)
-    tuples = TupleSet(new_list)
+    tuples = TupleSet(new_list, 3)
+    tuples.n_way_recursion(0, (), 0)
+    tuples.update_tuples()
 
     # generate 100 test suites
     start_time = time.time()
@@ -64,11 +66,11 @@ def main():
         suite_sum += len(suite)
 
     print("Results:\n"
-        "Lowest AETG:" + str(lowest) + "\n"
-        "Highest AETG: " + str(highest) + "\n"
-        "Average AETG: " + str(
+          "Lowest AETG:" + str(lowest) + "\n"
+                                         "Highest AETG: " + str(highest) + "\n"
+                                                                           "Average AETG: " + str(
         suite_sum / 100) + "\n"
-        "Average Execution Time: " + "{:.6f}".format((end_time-start_time)/100) + "\n")
+                           "Average Execution Time: " + "{:.6f}".format((end_time - start_time) / 100) + "\n")
 
     test_suite_output(lowest_suite)
 
