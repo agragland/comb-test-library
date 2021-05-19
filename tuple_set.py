@@ -8,6 +8,10 @@ class TupleSet:
         self.total_tuples = 0
         self.strength = n
 
+        #
+
+        self.candidate_count = 0
+
     def n_way_recursion(self, depth, t, f):
         if depth == self.strength:
             self.tuple_set.add(t)
@@ -35,22 +39,25 @@ class TupleSet:
 
         return count
 
-    def count_tuples_candidate(self, candidate, index):
-        count = 0
-        for i in range(index):
-            if (candidate[i], candidate[index]) in self.tuple_set:
-                count += 1
-        for i in range(index + 1, len(candidate)):
-            if (candidate[index], candidate[i]) in self.tuple_set:
-                count += 1
-        return count
+    def count_tuples_candidate(self, candidate, depth, t, f):
+        if depth == self.strength:
+            if t in self.tuple_set:
+                self.candidate_count += 1
+        else:
+            for i in range(f, len(candidate)):
+                nest_t = t + (candidate[i],)
+                self.count_tuples_candidate(candidate, depth+1, nest_t, i+1)
 
-    def cover_tuples(self, candidate):
-        for i in range(len(candidate) - 1):
-            for j in range(i + 1, len(candidate)):
-                if (candidate[i], candidate[j]) in self.tuple_set:
-                    self.tuple_set.discard((candidate[i], candidate[j]))
-                    self.covered += 1
+    def cover_tuples(self, candidate, depth, t, f):
+        if depth == self.strength:
+            if t in self.tuple_set:
+                print(t)
+                self.tuple_set.discard(t)
+                self.covered += 1
+        else:
+            for i in range(f, len(candidate)):
+                nest_t = t + (candidate[i],)
+                self.cover_tuples(candidate, depth+1, nest_t, i+1)
 
     def reset_tuples(self):
         self.tuple_set = self.tuple_copy.copy()

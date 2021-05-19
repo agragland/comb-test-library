@@ -38,9 +38,11 @@ def main():
     cover_input = input("Input as follows - \"#Levels^#Factors\" - put a space between each for multi-level covering:")
 
     new_list = generate_covering_array(cover_input)
-    tuples = TupleSet(new_list, 3)
+    tuples = TupleSet(new_list, 2)
     tuples.n_way_recursion(0, (), 0)
     tuples.update_tuples()
+
+    tuples.count_tuples_candidate((-1, 3, 6, -1), 0, (), 0)
 
     # generate 100 test suites
     start_time = time.time()
