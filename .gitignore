@@ -1,0 +1,5 @@
+# gitignore file
+
+/dist/
+/build/
+/src/comb_testing_agragland.egg-info

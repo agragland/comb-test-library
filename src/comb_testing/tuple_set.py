@@ -7,9 +7,6 @@ class TupleSet:
         self.covered = 0
         self.total_tuples = 0
         self.strength = n
-
-        #
-
         self.tuple_count = 0
 
     def n_way_recursion(self, depth, t, f):
