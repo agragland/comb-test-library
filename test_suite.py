@@ -30,7 +30,8 @@ class TestSuite:
                 factor_index = self.factor_order[curr_factor]
 
                 for val in self.covering_arr[factor_index]:
-                    if (count := self.tuples.count_tuples_value(val, factor_index)) > best_count:
+                    self.tuples.count_tuples_value(val, factor_index, 1, (val,), 0)
+                    if (count := self.tuples.get_tuple_count()) > best_count:
                         best_count = count
                         potential_lvls.clear()
                         potential_lvls.append(val)
@@ -48,7 +49,8 @@ class TestSuite:
 
                     for val in self.covering_arr[factor_index]:
                         curr_candidate[factor_index] = val
-                        if (count := self.tuples.count_tuples_candidate(curr_candidate,factor_index)) > best_count:
+                        self.tuples.count_tuples_candidate(curr_candidate, 0, (), 0)
+                        if (count := self.tuples.get_tuple_count()) > best_count:
                             best_count = count
                             potential_lvls.clear()
                             potential_lvls.append(val)
@@ -64,7 +66,7 @@ class TestSuite:
                     best_candidate = curr_candidate.copy()
 
             self.suite.append(best_candidate)
-            self.tuples.cover_tuples(best_candidate)
+            self.tuples.cover_tuples(best_candidate, 0, (), 0)
 
         self.tuples.reset_tuples()
         return self.suite
