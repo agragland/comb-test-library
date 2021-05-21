@@ -1,5 +1,5 @@
 from unittest import TestCase
-from tuple_set import TupleSet
+from comb_testing.tuple_set import TupleSet
 
 
 class TestTupleSet(TestCase):
