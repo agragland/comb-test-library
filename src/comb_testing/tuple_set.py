@@ -1,9 +1,15 @@
+# TupleSet class within comb_testing package
+# Copyright Andrew Ragland 2021
+import itertools
+
+
 class TupleSet:
 
     def __init__(self, new_list, n):
         self.tuple_set = set()
         self.tuple_copy = set()
         self.covering_arr = new_list
+        self.factor_count = len(self.covering_arr)
         self.covered = 0
         self.total_tuples = 0
         self.strength = n
@@ -13,7 +19,7 @@ class TupleSet:
         if depth == self.strength:
             self.tuple_set.add(t)
         else:
-            for fct in range(f, len(self.covering_arr)):
+            for fct in range(f, self.factor_count):
                 for lvl in self.covering_arr[fct]:
                     nest_t = t + (lvl,)
                     self.n_way_recursion(depth + 1, nest_t, fct + 1)
@@ -40,25 +46,22 @@ class TupleSet:
                             nest_t = t + (lvl,)
                             self.count_tuples_value(val, index, depth + 1, nest_t, fct + 1)
 
-    def count_tuples_candidate(self, candidate, depth, t, f):
-        if depth == self.strength:
+    # counter the number of tuples a specified candidate can cover
+    def count_tuples_candidate(self, candidate):
+        tuples = itertools.combinations(candidate, self.strength)
+        for t in tuples:
             if t in self.tuple_set:
                 self.tuple_count += 1
-        else:
-            for i in range(f, len(candidate)):
-                nest_t = t + (candidate[i],)
-                self.count_tuples_candidate(candidate, depth + 1, nest_t, i + 1)
 
-    def cover_tuples(self, candidate, depth, t, f):
-        if depth == self.strength:
+    # cover the tuples as found within a specified candidate
+    def cover_tuples(self, candidate):
+        tuples = itertools.combinations(candidate, self.strength)
+        for t in tuples:
             if t in self.tuple_set:
                 self.tuple_set.discard(t)
                 self.covered += 1
-        else:
-            for i in range(f, len(candidate)):
-                nest_t = t + (candidate[i],)
-                self.cover_tuples(candidate, depth + 1, nest_t, i + 1)
 
+    # once a test suite has covered all tuples, uncover all tuples such that another test suite can run
     def reset_tuples(self):
         self.tuple_set = self.tuple_copy.copy()
         self.covered = 0
@@ -69,6 +72,7 @@ class TupleSet:
     def get_tuples_covered(self):
         return self.covered
 
+    # after using count_tuples_value/_candidate, test suite gets count value and resets it for next count call
     def get_tuple_count(self):
         ret = self.tuple_count
         self.tuple_count = 0

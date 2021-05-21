@@ -3,6 +3,9 @@ from src.comb_testing.test_suite import TestSuite
 import re
 
 
+# function to generate a covering array based on input
+# input follows formatting "Input as follows - \"#Levels^#Factors\" -
+# put a space between each for multi-level covering:"
 def generate_covering_array(re_input):
     match_list = re.findall("(\\d+)\\^(\\d+)", re_input)
 
@@ -22,6 +25,7 @@ def generate_covering_array(re_input):
     return cover_arr
 
 
+# function to take a test suite and output contents to file
 def test_suite_output(suite):
     file_out = open("aetg_output.txt", "w")
 
@@ -33,16 +37,26 @@ def test_suite_output(suite):
     file_out.close()
 
 
+# function to run the greedy version of the combinatorial testing algorithm
+# new_list is a 2D list where the outer layer represents the factors and the inner layer represents the levels
+# strength represents the n of n-way coverage
 def greedy_algorithm(new_list, strength):
+    if strength > len(new_list):
+        print("Error: Coverage strength greater than factor count")
+        return []
+
     tuples = TupleSet(new_list, strength)
     tuples.n_way_recursion(0, (), 0)
     tuples.update_tuples()
 
     # generate 100 test suites
     test_suites = []
-    for i in range(100):
+
+    def get_suite():
         suite = TestSuite(tuples)
-        test_suites.append(suite.generate_suite())
+        return suite.generate_greedy_suite()
+
+    test_suites = [get_suite() for suite in range(100)]
 
     lowest_suite = test_suites[0]
     lowest = len(lowest_suite)
