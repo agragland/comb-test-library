@@ -73,18 +73,8 @@ def greedy_algorithm(new_list, strength):
     # generate 100 test suites
     test_suites = []
 
-    def get_suite():
-        suite = TestSuite(tuples)
-        return suite.generate_greedy_suite()
+    suite = TestSuite(tuples)
+    test = suite.generate_greedy_suite()
 
-    test_suites = [get_suite() for suite in range(100)]
-
-    lowest_suite = test_suites[0]
-    lowest = len(lowest_suite)
-
-    for suite in test_suites:
-        if len(suite) < lowest:
-            lowest = len(suite)
-            lowest_suite = suite
-
-    return lowest_suite
+    print(len(test))
+    print(test)

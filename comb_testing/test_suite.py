@@ -1,7 +1,7 @@
 # TestSuite class within comb_testing package
 # Copyright Andrew Ragland 2021
 
-import random
+import random, itertools
 
 
 class TestSuite:
@@ -12,66 +12,26 @@ class TestSuite:
         self.suite = []
         self.factor_order = list(range(self.factor_count))
 
+    def check_valid_candidate(self, candidate):
+        for fct_ind in range(self.factor_count):
+            if not candidate[fct_ind] in self.covering_arr[fct_ind]:
+                return False
+        return True
+
     # generate a test suite and return it using the greedy method
     def generate_greedy_suite(self):
 
-        best_candidate = [-1] * self.factor_count
+        while not self.tuples.is_empty():
+            counts = []
+            for row in self.tuples.combos:
+                counts.append(self.tuples.count_tuples_candidate(row))
+            test = list(itertools.zip_longest(self.tuples.combos, counts))
+            test = sorted(test, key=lambda x: x[1], reverse=True)
 
-        while self.tuples.get_tuples_covered() < self.tuples.get_total_tuples():
-
-            best_total = -1
-
-            for i in range(50):
-
-                curr_candidate = [-1] * self.factor_count
-
-                random.shuffle(self.factor_order)
-                potential_lvls = []
-                running_total = 0
-                best_count = -1
-                curr_factor = 0
-
-                # first factor
-                factor_index = self.factor_order[curr_factor]
-
-                for val in self.covering_arr[factor_index]:
-                    self.tuples.count_tuples_value(val, factor_index, 1, (val,), 0)
-                    if (count := self.tuples.get_tuple_count()) > best_count:
-                        best_count = count
-                        potential_lvls[:] = [val]
-                    elif count == best_count:
-                        potential_lvls.append(val)
-
-                curr_candidate[factor_index] = random.choice(potential_lvls)
-                curr_factor += 1
-
-                # remaining factors
-                while curr_factor < self.factor_count:
-                    best_count = -1
-                    potential_lvls[:] = []
-                    factor_index = self.factor_order[curr_factor]
-
-                    for val in self.covering_arr[factor_index]:
-                        curr_candidate[factor_index] = val
-                        self.tuples.count_tuples_candidate(curr_candidate)
-                        if (count := self.tuples.get_tuple_count()) > best_count:
-                            best_count = count
-                            potential_lvls = [val]
-                        elif count == best_count:
-                            potential_lvls.append(val)
-
-                    curr_candidate[factor_index] = random.choice(potential_lvls)
-                    running_total += best_count
-                    curr_factor += 1
-
-                if running_total < best_total:
+            for row in test:
+                if self.check_valid_candidate(row[0]):
+                    self.tuples.cover_tuples(row[0])
+                    self.suite.append(row[0])
                     break
-                elif running_total >= best_total:
-                    best_total = running_total
-                    best_candidate = curr_candidate.copy()
 
-            self.suite.append(best_candidate)
-            self.tuples.cover_tuples(best_candidate)
-
-        self.tuples.reset_tuples()
         return self.suite
