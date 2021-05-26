@@ -67,14 +67,8 @@ def greedy_algorithm(new_list, strength):
         print("Error: Input list is invalid")
 
     tuples = TupleSet(new_list, strength)
-    tuples.n_way_recursion(0, (), 0)
-    tuples.update_tuples()
-
-    # generate 100 test suites
-    test_suites = []
 
     suite = TestSuite(tuples)
     test = suite.generate_greedy_suite()
 
-    print(len(test))
-    print(test)
+    return test
