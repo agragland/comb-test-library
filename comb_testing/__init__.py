@@ -1,7 +1,7 @@
 # __init__.py
 
 # Version of the combinatorial_tests package
-__version__ = "0.0.2"
+__version__ = "0.0.2a"
 
 from comb_testing.tuple_set import TupleSet
 from comb_testing.test_suite import TestSuite
