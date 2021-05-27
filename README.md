@@ -10,10 +10,20 @@ To import the package once installed, use:
 
 Once imported, the primary function to use is called using:
 
-`comb_testing.greedy_algorithm(<list>, <strength>)`
+`comb_testing.greedy_algorithm(<list>, <strength>, <flag>)`
 
 Where `<list>` is the **N** x **k** list of factors and levels and `<strength>` is the **t** value
 
+The `<flag>` value allows the user to select between two different algorithms for suite generation. 
+
+The first, where `flag == 1` is an algorithm which is optimized for a larger covering array (one that exceeds more than 5 levels and/or 5 factors). 
+
+The second, where `flag == 2` is an algorithm optimized for speed but is only fast with a smaller sized covering array.
+
+The first algorithm is designed to be more traditionally greedy, but due to usage of random generation, final test suites can vary in size.
+
+The second algorithm takes a more "back-to-front" approach by first generating all possible candidate rows and generating a suite based on 
+how many tuples the top-most row can generate over time. 
 
 ## Covering Array Generation
 

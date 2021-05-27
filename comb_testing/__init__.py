@@ -1,7 +1,7 @@
 # __init__.py
 
 # Version of the combinatorial_tests package
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 from comb_testing.tuple_set import TupleSet
 from comb_testing.test_suite import TestSuite
@@ -10,7 +10,7 @@ import re
 
 # function to generate a covering array based on input
 # input follows formatting "Input as follows - \"#Levels^#Factors\" -
-# put a space bgenerate_covering_arrayetween each for multi-level covering:"
+# put a space between each for multi-level covering:"
 def generate_covering_array(re_input):
     match_list = re.findall("(\\d+)\\^(\\d+)", re_input)
 
@@ -59,7 +59,7 @@ def check_valid_input(new_list):
 # function to run the greedy version of the combinatorial testing algorithm
 # new_list is a 2D list where the outer layer represents the factors and the inner layer represents the levels
 # strength represents the n of n-way coverage
-def greedy_algorithm(new_list, strength):
+def greedy_algorithm(new_list, strength, flag):
     if strength > len(new_list):
         print("Error: Coverage strength greater than factor count")
         return []
@@ -70,21 +70,11 @@ def greedy_algorithm(new_list, strength):
     tuples.n_way_recursion(0, (), 0)
     tuples.update_tuples()
 
-    # generate 100 test suites
-    test_suites = []
+    # generate a test suite
+    suite = TestSuite(tuples)
 
-    def get_suite():
-        suite = TestSuite(tuples)
-        return suite.generate_greedy_suite()
-
-    test_suites = [get_suite() for suite in range(100)]
-
-    lowest_suite = test_suites[0]
-    lowest = len(lowest_suite)
-
-    for suite in test_suites:
-        if len(suite) < lowest:
-            lowest = len(suite)
-            lowest_suite = suite
-
-    return lowest_suite
+    if flag == 1:
+        return suite.generate_greedy_suite_size()
+    elif flag == 2:
+        tuples.generate_combos()
+        return suite.generate_greedy_suite_speed()

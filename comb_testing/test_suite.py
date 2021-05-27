@@ -1,6 +1,7 @@
 # TestSuite class within comb_testing package
 # Copyright Andrew Ragland 2021
 
+import itertools
 import random
 
 
@@ -12,8 +13,14 @@ class TestSuite:
         self.suite = []
         self.factor_order = list(range(self.factor_count))
 
+    def check_valid_candidate(self, candidate):
+        for fct_ind in range(self.factor_count):
+            if not candidate[fct_ind] in self.covering_arr[fct_ind]:
+                return False
+        return True
+
     # generate a test suite and return it using the greedy method
-    def generate_greedy_suite(self):
+    def generate_greedy_suite_size(self):
 
         best_candidate = [-1] * self.factor_count
 
@@ -74,4 +81,22 @@ class TestSuite:
             self.tuples.cover_tuples(best_candidate)
 
         self.tuples.reset_tuples()
+        return self.suite
+
+    # generate a test suite by first generating all possible candidate rows and add to suite based on maximum coverage
+    def generate_greedy_suite_speed(self):
+        while not self.tuples.is_empty():
+            counts = []
+            for row in self.tuples.combos:
+                self.tuples.count_tuples_candidate(row)
+                counts.append(self.tuples.get_tuple_count())
+            test = list(itertools.zip_longest(self.tuples.combos, counts))
+            test = sorted(test, key=lambda x: x[1], reverse=True)
+
+            for row in test:
+                if self.check_valid_candidate(row[0]):
+                    self.tuples.cover_tuples(row[0])
+                    self.suite.append(row[0])
+                    break
+
         return self.suite

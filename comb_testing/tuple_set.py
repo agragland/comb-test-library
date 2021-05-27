@@ -15,6 +15,12 @@ class TupleSet:
         self.strength = n
         self.tuple_count = 0
 
+        self.combos = []
+
+    def generate_combos(self):
+        self.combos = list(
+            itertools.combinations([lvl for fct in self.covering_arr for lvl in fct], len(self.covering_arr)))
+
     def n_way_recursion(self, depth, t, f):
         if depth == self.strength:
             self.tuple_set.add(t)
@@ -77,6 +83,9 @@ class TupleSet:
         ret = self.tuple_count
         self.tuple_count = 0
         return ret
+
+    def is_empty(self):
+        return False if self.tuple_set else True
 
     def get_covering_arr(self):
         return self.covering_arr
