@@ -2,13 +2,16 @@
 This package allows a user to input a list of **n** factors and **k** levels with a coverage strength value **t** to
 create an optimal suite of tests that can be run.
 
-## Primary Function
+## Test Suite Generation
 
 To import the package once installed, use:
 
 `import comb_testing`
 
-Once imported, the primary function to use is called using:
+This package contains two types of algorithms designed to generate test suites. One uses a greedy method, while the other uses a weighted method.
+
+### Greedy Algorithm
+Once imported, the greedy algorithm function is called using:
 
 `comb_testing.greedy_algorithm(<list>, <strength>, <flag>)`
 
@@ -24,6 +27,24 @@ The first algorithm is designed to be more traditionally greedy, but due to usag
 
 The second algorithm takes a more "back-to-front" approach by first generating all possible candidate rows and generating a suite based on 
 how many tuples the top-most row can generate over time. 
+
+### Biased Algorithm
+A secondary algorithm which will generate a test suite through usage of a "benefit list" is available as well and can be called as
+
+`comb_testing.biased_algorithm(<main_list>, <benefit_list>, <exclusions>)`
+
+One note about this algorithm is that it can only support pairwise (2-way) coverage.
+
+The structure `<main_list>` is similar to that of `<list>` as described above. It is an **N** x **k** list of factors and levels.
+
+The `<benefit_list>` structure is also **N** x **k** size, but instead of unique values, the values are replaced with weights
+or "benefit" values associated with the corresponding element in the `<main_list>`.
+
+NOTE: If user intends to use `<benefit_list>` with covering array generation as dicussed below, a matching array with benefit values must be coded in place. 
+Creating a function which will do this process automatically with a range of benefit values will be added in the future
+
+Finally, `<exclusions>` allows the user to enter a list of pairwise tuples to exclude from the final test suite. For example, if a 
+user wants to exclude the pair (2, 4) from the final suite, then the `<exclusions>` list would be `[(2,4)]` and so on for more than one pair.
 
 ## Covering Array Generation
 

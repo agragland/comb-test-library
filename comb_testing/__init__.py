@@ -1,10 +1,11 @@
 # __init__.py
 
 # Version of the combinatorial_tests package
-__version__ = "0.0.2a"
+__version__ = "0.0.4"
 
 from comb_testing.tuple_set import TupleSet
 from comb_testing.test_suite import TestSuite
+from comb_testing.biased_algorithm import generate_biased_suite
 import re
 
 
@@ -65,6 +66,7 @@ def greedy_algorithm(new_list, strength, flag):
         return []
     if not check_valid_input(new_list):
         print("Error: Input list is invalid")
+        return
 
     tuples = TupleSet(new_list, strength)
     tuples.n_way_recursion(0, (), 0)
@@ -78,3 +80,14 @@ def greedy_algorithm(new_list, strength, flag):
     elif flag == 2:
         tuples.generate_combos()
         return suite.generate_greedy_suite_speed()
+
+
+# function to run the biased version of the combinatorial testing algorithm
+# new_list and benefit_list 2D lists of equal size and depth which map a "benefit" value to each value in the main list
+# exclusions is a list which contains pairs to be excluded from final test cases
+def biased_algorithm(new_list, benefit_list, exclusions):
+    if not check_valid_input(new_list):
+        print("Error: Input list is invalid")
+        return
+
+    return generate_biased_suite(new_list, benefit_list, exclusions)

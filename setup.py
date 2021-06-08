@@ -9,7 +9,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name='combinatorial_tests_agragland',
-    version='0.0.2a',
+    version='0.0.4',
     packages=["comb_testing"],
     py_modules=["test_suite", "tuple_set"],
     url='https://github.com/agragland/comb-test-library',
